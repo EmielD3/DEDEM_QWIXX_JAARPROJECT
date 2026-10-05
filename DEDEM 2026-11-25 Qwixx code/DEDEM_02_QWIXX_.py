@@ -69,6 +69,8 @@ b_blauw_slot = psg.Button(key='-bbSLOT-', image_filename='slot_blauw.png', butto
 
 b_exit = psg.Button('EXIT', key='-EXIT-')
 
+slotknoppen = ['-brSLOT-', '-bgSLOT-', '-bgrSLOT-', '-bbSLOT-']
+
 layout = [[b_rood2, b_rood3, b_rood4, b_rood5, b_rood6, b_rood7,
            b_rood8, b_rood9, b_rood10, b_rood11, b_rood12, b_rood_slot],
 
@@ -84,15 +86,29 @@ layout = [[b_rood2, b_rood3, b_rood4, b_rood5, b_rood6, b_rood7,
           [b_exit]]
 
 window = psg.Window('DEDEM_02_QWIXX', layout)
+window.finalize()
+
+
+# Past de knop aan die ingedrukt is
+def update_knop(event):
+    if event in slotknoppen:
+        # slot: de knop kan niet meer ingedrukt worden
+        window[event].update(disabled=True)
+    else:
+        # cijfer: kruisje zetten en de knop vastzetten
+        window[event].update('X', disabled=True)
+
 
 doorgaan = True
 while doorgaan:
     event, values = window.read()
-
     print(f"event: {event}")
     print(f"values: {values}")
 
     if event == psg.WIN_CLOSED or event == '-EXIT-':
         doorgaan = False
+
+    else:
+        update_knop(event)
 
 window.close()
