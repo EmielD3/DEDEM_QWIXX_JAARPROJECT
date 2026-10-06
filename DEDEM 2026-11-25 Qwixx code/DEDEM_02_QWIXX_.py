@@ -70,6 +70,7 @@ b_groen_slot = psg.Button(key='-bgrSLOT-', image_filename='slot_groen.png', butt
 b_blauw_slot = psg.Button(key='-bbSLOT-', image_filename='slot_blauw.png', button_color=(WIT, BLAUW))
 
 b_exit = psg.Button('EXIT', key='-EXIT-')
+b_reset = psg.Button('RESET', key='-RESET-')
 
 # Alle slotknoppen in een lijst, dan kan ik ze makkelijk herkennen
 slotknoppen = ['-brSLOT-', '-bgSLOT-', '-bgrSLOT-', '-bbSLOT-']
@@ -88,7 +89,7 @@ layout = [[b_rood2, b_rood3, b_rood4, b_rood5, b_rood6, b_rood7,
           [b_blauw12, b_blauw11, b_blauw10, b_blauw9, b_blauw8, b_blauw7,
            b_blauw6, b_blauw5, b_blauw4, b_blauw3, b_blauw2, b_blauw_slot],
 
-          [b_exit]]
+          [b_exit, b_reset]]
 
 window = psg.Window('DEDEM_02_QWIXX', layout)
 window.finalize()
@@ -111,6 +112,17 @@ groene_knoppen = ['-bgr2-', '-bgr3-', '-bgr4-', '-bgr5-', '-bgr6-', '-bgr7-',
 
 blauwe_knoppen = ['-bb2-', '-bb3-', '-bb4-', '-bb5-', '-bb6-', '-bb7-',
                   '-bb8-', '-bb9-', '-bb10-', '-bb11-', '-bb12-']
+
+def haal_nummer_uit_key(key):
+    tekst = key.strip('-')
+    cijfers = '0123456789'
+    nummer = ''
+    
+    for karakter in tekst:
+        if karakter in cijfers:
+            nummer += karakter
+            
+    return nummer
 
 def update_knop(event):
 
@@ -153,6 +165,22 @@ while doorgaan:
 
     if event == psg.WIN_CLOSED or event == '-EXIT-':
         doorgaan = False
+
+    elif event == '-RESET-':
+        # Reset alle waarden en knoppen
+        keuze = psg.popup_yes_no('ben je zeker dat je alles wilt resetten?')
+        if keuze == 'Yes':
+            aantal = {'rood': 0, 'geel': 0, 'groen': 0, 'blauw': 0}
+        
+            for knop_lijst in [rode_knoppen, gele_knoppen, groene_knoppen, blauwe_knoppen]:
+                for knop in knop_lijst:
+                    nummer = haal_nummer_uit_key(knop)
+                    window[knop].update(nummer, disabled=False)
+            
+            for slot in slotknoppen:
+                window[slot].update('')
+
+
 
     else:
         update_knop(event)
