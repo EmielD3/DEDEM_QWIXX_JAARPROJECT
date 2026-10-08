@@ -96,20 +96,37 @@ def update_knop(event):
             window[event].update(disabled=True)
 
     else:
-        window[event].update('X', disabled=True)
 
-        if event in rode_knoppen:
-            aantal['rood'] += 1
+        # kruisje verwijderen
+        if window[event].get_text() == 'X':
+            nummer = haal_nummer_uit_key(event)
+            window[event].update(nummer)
+            if event in rode_knoppen:
+                aantal['rood'] -= 1
 
-        elif event in gele_knoppen:
-            aantal['geel'] += 1
+            elif event in gele_knoppen:
+                aantal['geel'] -= 1
 
-        elif event in groene_knoppen:
-            aantal['groen'] += 1
+            elif event in groene_knoppen:
+                aantal['groen'] -= 1
 
-        elif event in blauwe_knoppen:
-            aantal['blauw'] += 1
+            elif event in blauwe_knoppen:
+                aantal['blauw'] -= 1
 
+        # kruisje zetten
+        else:
+            window[event].update('X')
+            if event in rode_knoppen:
+                aantal['rood'] += 1
+
+            elif event in gele_knoppen:
+                aantal['geel'] += 1
+
+            elif event in groene_knoppen:
+                aantal['groen'] += 1
+
+            elif event in blauwe_knoppen:
+                aantal['blauw'] += 1
 doorgaan = True
 while doorgaan:
     event, values = window.read()
