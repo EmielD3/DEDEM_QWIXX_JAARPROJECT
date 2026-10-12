@@ -47,11 +47,11 @@ def maak_rij_knoppen(knoppen_lijst, kleur, slot_key, afbeelding):
     
     return rij
 
-# Maken van de rijen via de functie
-layout_rood = maak_rij_knoppen(rode_knoppen, ROOD, '-brSLOT-', 'slot_rood.png')
-layout_geel = maak_rij_knoppen(gele_knoppen, GEEL, '-bgSLOT-', 'slot_geel.png')
-layout_groen = maak_rij_knoppen(groene_knoppen, GROEN, '-bgrSLOT-', 'slot_groen.png')
-layout_blauw = maak_rij_knoppen(blauwe_knoppen, BLAUW, '-bbSLOT-', 'slot_blauw.png')
+# Maken van de rijen via de functie (met de juiste bestandsnamen uit je project)
+layout_rood = maak_rij_knoppen(rode_knoppen, ROOD, '-brSLOT-', 'Rood_slot_leeg.png')
+layout_geel = maak_rij_knoppen(gele_knoppen, GEEL, '-bgSLOT-', 'Geel_slot_leeg.png')
+layout_groen = maak_rij_knoppen(groene_knoppen, GROEN, '-bgrSLOT-', 'Groen_slot_leeg.png')
+layout_blauw = maak_rij_knoppen(blauwe_knoppen, BLAUW, '-bbSLOT-', 'Blauw_slot_leeg.png')
 
 b_exit = psg.Button('EXIT', key='-EXIT-')
 b_reset = psg.Button('RESET', key='-RESET-')
@@ -148,28 +148,36 @@ def update_knop(event):
         if aantal['rood'] >= 5 and window['-br12-'].get_text() == 'X':
             slot_aan['rood'] = not slot_aan['rood']
             if slot_aan['rood']:
-                window[event].update(disabled=True)
+                window[event].update(image_filename='Rood_slot_kruisje.png')
+            else:
+                window[event].update(image_filename='Rood_slot_leeg.png')
             update_scores()
 
     elif event == '-bgSLOT-':
         if aantal['geel'] >= 5 and window['-bg12-'].get_text() == 'X':
             slot_aan['geel'] = not slot_aan['geel']
             if slot_aan['geel']:
-                window[event].update(disabled=True)
+                window[event].update(image_filename='Geel_slot_kruisje.png')
+            else:
+                window[event].update(image_filename='Geel_slot_leeg.png')
             update_scores()
 
     elif event == '-bgrSLOT-':
         if aantal['groen'] >= 5 and window['-bgr2-'].get_text() == 'X':
             slot_aan['groen'] = not slot_aan['groen']
             if slot_aan['groen']:
-                window[event].update(disabled=True)
+                window[event].update(image_filename='Groen_slot_kruisje.png')
+            else:
+                window[event].update(image_filename='Groen_slot_leeg.png')
             update_scores()
 
     elif event == '-bbSLOT-':
         if aantal['blauw'] >= 5 and window['-bb2-'].get_text() == 'X':
             slot_aan['blauw'] = not slot_aan['blauw']
             if slot_aan['blauw']:
-                window[event].update(disabled=True)
+                window[event].update(image_filename='Blauw_slot_kruisje.png')
+            else:
+                window[event].update(image_filename='Blauw_slot_leeg.png')
             update_scores()
 
     else:
@@ -225,8 +233,11 @@ while doorgaan:
                     nummer = haal_nummer_uit_key(knop)
                     window[knop].update(nummer, disabled=False)
             
-            for slot in slotknoppen:
-                window[slot].update('', disabled=False)
+            # Reset de slotjes naar leeg
+            window['-brSLOT-'].update(image_filename='Rood_slot_leeg.png')
+            window['-bgSLOT-'].update(image_filename='Geel_slot_leeg.png')
+            window['-bgrSLOT-'].update(image_filename='Groen_slot_leeg.png')
+            window['-bbSLOT-'].update(image_filename='Blauw_slot_leeg.png')
                 
             for misser in misser_knoppen:
                 window[misser].update('')
