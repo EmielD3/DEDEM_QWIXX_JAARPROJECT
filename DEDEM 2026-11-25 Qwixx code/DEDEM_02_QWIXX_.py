@@ -28,7 +28,6 @@ def haal_nummer_uit_key(key):
     tekst = key.strip('-')
     cijfers = '0123456789'
     nummer = ''
-    
     for karakter in tekst:
         if karakter in cijfers:
             nummer += karakter
@@ -143,6 +142,44 @@ def update_scores():
     window['-TBLAUW-'].update(f'Blauw: {score_blauw}')
     window['-TTOTAAL-'].update(f'Totaal: {totaal}')
 
+def mag_aankruisen(event):
+    #controle voor de rode rij
+    if event in rode_knoppen:
+        positie_van_aangelikte_knop = rode_knoppen.index(event)
+        for knop in rode_knoppen:
+            if window[knop].get_text() == 'X':
+                positie_van_kruisje = rode_knoppen.index(knop)
+                if positie_van_kruisje > positie_van_aangelikte_knop:
+                    return False
+                
+    # Controle voor de gele rij
+    elif event in gele_knoppen:
+        positie_van_aangeklikte_knop = gele_knoppen.index(event)
+        for knop in gele_knoppen:
+            if window[knop].get_text() == 'X':
+                positie_van_kruisje = gele_knoppen.index(knop)
+                if positie_van_kruisje > positie_van_aangeklikte_knop:
+                    return False
+                
+    # Controle voor de groene rij
+    elif event in groene_knoppen:
+        positie_van_aangeklikte_knop = groene_knoppen.index(event)
+        for knop in groene_knoppen:
+            if window[knop].get_text() == 'X':
+                positie_van_kruisje = groene_knoppen.index(knop)
+                if positie_van_kruisje > positie_van_aangeklikte_knop:
+                    return False
+                
+    # Controle voor de blauwe rij
+    elif event in blauwe_knoppen:
+        positie_van_aangeklikte_knop = blauwe_knoppen.index(event)
+        for knop in blauwe_knoppen:
+            if window[knop].get_text() == 'X':
+                positie_van_kruisje = blauwe_knoppen.index(knop)
+                if positie_van_kruisje > positie_van_aangeklikte_knop:
+                    return False
+    return True
+
 def update_knop(event):
     if event == '-brSLOT-':
         if aantal['rood'] >= 5 and window['-br12-'].get_text() == 'X':
@@ -196,6 +233,18 @@ def update_knop(event):
 
         # kruisje zetten
         else:
+            if not mag_aankruisen(event):
+                if event in rode_knoppen:
+                    psg.popup('Je mag geen kruisje links van een eerder geplaatst kruisje zetten')
+                elif event in gele_knoppen:
+                    psg.popup('Je mag geen kruisje links van een eerder geplaatst kruisje zetten')
+                elif event in groene_knoppen:
+                    psg.popup('Je mag geen kruisje links van een eerder geplaatst kruisje zetten')
+                elif event in blauwe_knoppen:
+                    psg.popup('Je mag geen kruisje links van een eerder geplaatst kruisje zetten')
+
+                return
+                
             window[event].update('X')
             if event in rode_knoppen:
                 aantal['rood'] += 1
