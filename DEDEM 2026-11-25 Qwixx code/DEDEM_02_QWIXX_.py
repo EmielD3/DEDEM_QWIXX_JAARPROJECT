@@ -145,11 +145,11 @@ def update_scores():
 def mag_aankruisen(event):
     #controle voor de rode rij
     if event in rode_knoppen:
-        positie_van_aangelikte_knop = rode_knoppen.index(event)
+        positie_van_aangeklikte_knop = rode_knoppen.index(event)
         for knop in rode_knoppen:
             if window[knop].get_text() == 'X':
                 positie_van_kruisje = rode_knoppen.index(knop)
-                if positie_van_kruisje > positie_van_aangelikte_knop:
+                if positie_van_kruisje > positie_van_aangeklikte_knop:
                     return False
                 
     # Controle voor de gele rij
@@ -180,7 +180,79 @@ def mag_aankruisen(event):
                     return False
     return True
 
+verboden_knoppen = []
+
+def update_beschikbare_knoppen():
+    verboden_knoppen.clear()
+
+    # Rood
+    meest_rechtse_kruisje = -1
+    for knop in rode_knoppen:
+        if window[knop].get_text() == 'X':
+            meest_rechtse_kruisje = rode_knoppen.index(knop)
+    for knop in rode_knoppen:
+        positie_van_knop = rode_knoppen.index(knop)
+        if window[knop].get_text() == 'X':
+            window[knop].update(button_color=(WIT, ROOD))
+        elif positie_van_knop < meest_rechtse_kruisje:
+            verboden_knoppen.append(knop)
+            window[knop].update(button_color=(WIT, ZWART))
+        else:
+            window[knop].update(button_color=(WIT, ROOD))
+
+
+    # Geel
+    meest_rechtse_kruisje = -1
+    for knop in gele_knoppen:
+        if window[knop].get_text() == 'X':
+            meest_rechtse_kruisje = gele_knoppen.index(knop)
+    for knop in gele_knoppen:
+        positie_van_knop = gele_knoppen.index(knop)
+        if window[knop].get_text() == 'X':
+            window[knop].update(button_color=(WIT, GEEL))
+        elif positie_van_knop < meest_rechtse_kruisje:
+            verboden_knoppen.append(knop)
+            window[knop].update(button_color=(WIT, ZWART))
+        else:
+            window[knop].update(button_color=(WIT, GEEL))
+
+    # Groen
+    meest_rechtse_kruisje = -1
+    for knop in groene_knoppen:
+        if window[knop].get_text() == 'X':
+            meest_rechtse_kruisje = groene_knoppen.index(knop)
+    for knop in groene_knoppen:
+        positie_van_knop = groene_knoppen.index(knop)
+        if window[knop].get_text() == 'X':
+            window[knop].update(button_color=(WIT, GROEN))
+        elif positie_van_knop < meest_rechtse_kruisje:
+            verboden_knoppen.append(knop)
+            window[knop].update(button_color=(WIT, ZWART))
+        else:
+            window[knop].update(button_color=(WIT, GROEN))
+
+
+    # Blauw
+    meest_rechtse_kruisje = -1
+    for knop in blauwe_knoppen:
+        if window[knop].get_text() == 'X':
+            meest_rechtse_kruisje = blauwe_knoppen.index(knop)
+    for knop in blauwe_knoppen:
+        positie_van_knop = blauwe_knoppen.index(knop)
+        if window[knop].get_text() == 'X':
+            window[knop].update(button_color=(WIT, BLAUW))
+        elif positie_van_knop < meest_rechtse_kruisje:
+            verboden_knoppen.append(knop)
+            window[knop].update(button_color=(WIT, ZWART))
+        else:
+            window[knop].update(button_color=(WIT, BLAUW))
+
+
 def update_knop(event):
+    if event in verboden_knoppen:
+        psg.popup('Dit vakje kan niet meer gebruikt worden.')
+        return
+    
     if event == '-brSLOT-':
         if aantal['rood'] >= 5 and window['-br12-'].get_text() == 'X':
             slot_aan['rood'] = not slot_aan['rood']
@@ -189,6 +261,7 @@ def update_knop(event):
             else:
                 window[event].update(image_filename='Rood_slot_leeg.png')
             update_scores()
+            update_beschikbare_knoppen()
 
     elif event == '-bgSLOT-':
         if aantal['geel'] >= 5 and window['-bg12-'].get_text() == 'X':
@@ -198,6 +271,7 @@ def update_knop(event):
             else:
                 window[event].update(image_filename='Geel_slot_leeg.png')
             update_scores()
+            update_beschikbare_knoppen()
 
     elif event == '-bgrSLOT-':
         if aantal['groen'] >= 5 and window['-bgr2-'].get_text() == 'X':
@@ -207,6 +281,7 @@ def update_knop(event):
             else:
                 window[event].update(image_filename='Groen_slot_leeg.png')
             update_scores()
+            update_beschikbare_knoppen()
 
     elif event == '-bbSLOT-':
         if aantal['blauw'] >= 5 and window['-bb2-'].get_text() == 'X':
@@ -216,6 +291,7 @@ def update_knop(event):
             else:
                 window[event].update(image_filename='Blauw_slot_leeg.png')
             update_scores()
+            update_beschikbare_knoppen()
 
     else:
         # kruisje verwijderen
@@ -232,19 +308,7 @@ def update_knop(event):
                 aantal['blauw'] -= 1
 
         # kruisje zetten
-        else:
-            if not mag_aankruisen(event):
-                if event in rode_knoppen:
-                    psg.popup('Je mag geen kruisje links van een eerder geplaatst kruisje zetten')
-                elif event in gele_knoppen:
-                    psg.popup('Je mag geen kruisje links van een eerder geplaatst kruisje zetten')
-                elif event in groene_knoppen:
-                    psg.popup('Je mag geen kruisje links van een eerder geplaatst kruisje zetten')
-                elif event in blauwe_knoppen:
-                    psg.popup('Je mag geen kruisje links van een eerder geplaatst kruisje zetten')
-
-                return
-                
+        else:                
             window[event].update('X')
             if event in rode_knoppen:
                 aantal['rood'] += 1
@@ -256,9 +320,11 @@ def update_knop(event):
                 aantal['blauw'] += 1
                 
         update_scores()
+        update_beschikbare_knoppen()
 
 # Startscores instellen
 update_scores()
+update_beschikbare_knoppen()
 
 doorgaan = True
 while doorgaan:
@@ -292,6 +358,7 @@ while doorgaan:
                 window[misser].update('')
                 
             update_scores()
+            update_beschikbare_knoppen()
 
     elif event in misser_knoppen:
         if window[event].get_text() == 'X':
@@ -305,6 +372,7 @@ while doorgaan:
                 psg.popup('Einde spel: 4 missers bereikt.')
 
         update_scores()
+        update_beschikbare_knoppen()
 
     else:
         update_knop(event)
