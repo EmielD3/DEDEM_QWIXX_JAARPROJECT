@@ -7,6 +7,7 @@ GROEN = '#3fa56a'
 BLAUW = '#2a5fb8'
 ZWART = '#000000'
 WIT = '#FFFFFF'
+KEUZE_KLEUR = '#FFFFFF'
 
 # zo moet ik het lettertype niet bij elke knop zetten
 psg.set_options(font=('Arial Bold', 14))
@@ -47,10 +48,10 @@ def maak_rij_knoppen(knoppen_lijst, kleur, slot_key, afbeelding):
     return rij
 
 # Maken van de rijen via de functie (met de juiste bestandsnamen uit je project)
-layout_rood = maak_rij_knoppen(rode_knoppen, ROOD, '-brSLOT-', 'Rood_slot_leeg.png')
-layout_geel = maak_rij_knoppen(gele_knoppen, GEEL, '-bgSLOT-', 'Geel_slot_leeg.png')
-layout_groen = maak_rij_knoppen(groene_knoppen, GROEN, '-bgrSLOT-', 'Groen_slot_leeg.png')
-layout_blauw = maak_rij_knoppen(blauwe_knoppen, BLAUW, '-bbSLOT-', 'Blauw_slot_leeg.png')
+layout_rood = maak_rij_knoppen(rode_knoppen, ROOD, '-brSLOT-', 'DEDEM_Rood_slot_leeg.png')
+layout_geel = maak_rij_knoppen(gele_knoppen, GEEL, '-bgSLOT-', 'DEDEM_Geel_slot_leeg.png')
+layout_groen = maak_rij_knoppen(groene_knoppen, GROEN, '-bgrSLOT-', 'DEDEM_Groen_slot_leeg.png')
+layout_blauw = maak_rij_knoppen(blauwe_knoppen, BLAUW, '-bbSLOT-', 'DEDEM_Blauw_slot_leeg.png')
 
 b_exit = psg.Button('EXIT', key='-EXIT-')
 b_reset = psg.Button('RESET', key='-RESET-')
@@ -257,9 +258,9 @@ def update_knop(event):
         if aantal['rood'] >= 5 and window['-br12-'].get_text() == 'X':
             slot_aan['rood'] = not slot_aan['rood']
             if slot_aan['rood']:
-                window[event].update(image_filename='Rood_slot_kruisje.png')
+                window[event].update(image_filename='DEDEM_Rood_slot_kruisje.png')
             else:
-                window[event].update(image_filename='Rood_slot_leeg.png')
+                window[event].update(image_filename='DEDEM_Rood_slot_leeg.png')
             update_scores()
             update_beschikbare_knoppen()
 
@@ -267,9 +268,9 @@ def update_knop(event):
         if aantal['geel'] >= 5 and window['-bg12-'].get_text() == 'X':
             slot_aan['geel'] = not slot_aan['geel']
             if slot_aan['geel']:
-                window[event].update(image_filename='Geel_slot_kruisje.png')
+                window[event].update(image_filename='DEDEM_Geel_slot_kruisje.png')
             else:
-                window[event].update(image_filename='Geel_slot_leeg.png')
+                window[event].update(image_filename='DEDEM_Geel_slot_leeg.png')
             update_scores()
             update_beschikbare_knoppen()
 
@@ -277,9 +278,9 @@ def update_knop(event):
         if aantal['groen'] >= 5 and window['-bgr2-'].get_text() == 'X':
             slot_aan['groen'] = not slot_aan['groen']
             if slot_aan['groen']:
-                window[event].update(image_filename='Groen_slot_kruisje.png')
+                window[event].update(image_filename='DEDEM_Groen_slot_kruisje.png')
             else:
-                window[event].update(image_filename='Groen_slot_leeg.png')
+                window[event].update(image_filename='DEDEM_Groen_slot_leeg.png')
             update_scores()
             update_beschikbare_knoppen()
 
@@ -287,9 +288,9 @@ def update_knop(event):
         if aantal['blauw'] >= 5 and window['-bb2-'].get_text() == 'X':
             slot_aan['blauw'] = not slot_aan['blauw']
             if slot_aan['blauw']:
-                window[event].update(image_filename='Blauw_slot_kruisje.png')
+                window[event].update(image_filename='DEDEM_Blauw_slot_kruisje.png')
             else:
-                window[event].update(image_filename='Blauw_slot_leeg.png')
+                window[event].update(image_filename='DEDEM_Blauw_slot_leeg.png')
             update_scores()
             update_beschikbare_knoppen()
 
@@ -349,10 +350,10 @@ while doorgaan:
                     window[knop].update(nummer, disabled=False)
             
             # Reset de slotjes naar leeg
-            window['-brSLOT-'].update(image_filename='Rood_slot_leeg.png')
-            window['-bgSLOT-'].update(image_filename='Geel_slot_leeg.png')
-            window['-bgrSLOT-'].update(image_filename='Groen_slot_leeg.png')
-            window['-bbSLOT-'].update(image_filename='Blauw_slot_leeg.png')
+            window['-brSLOT-'].update(image_filename='DEDEM_Rood_slot_leeg.png')
+            window['-bgSLOT-'].update(image_filename='DEDEM_Geel_slot_leeg.png')
+            window['-bgrSLOT-'].update(image_filename='DEDEM_Groen_slot_leeg.png')
+            window['-bbSLOT-'].update(image_filename='DEDEM_Blauw_slot_leeg.png')
                 
             for misser in misser_knoppen:
                 window[misser].update('')
