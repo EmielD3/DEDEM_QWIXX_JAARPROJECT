@@ -53,8 +53,8 @@ layout_geel = maak_rij_knoppen(gele_knoppen, GEEL, '-bgSLOT-', 'DEDEM_Geel_slot_
 layout_groen = maak_rij_knoppen(groene_knoppen, GROEN, '-bgrSLOT-', 'DEDEM_Groen_slot_leeg.png')
 layout_blauw = maak_rij_knoppen(blauwe_knoppen, BLAUW, '-bbSLOT-', 'DEDEM_Blauw_slot_leeg.png')
 
-b_exit = psg.Button('EXIT', key='-EXIT-')
-b_reset = psg.Button('RESET', key='-RESET-')
+knop_exit = psg.Button('EXIT', key='-EXIT-')
+knop_reset = psg.Button('RESET', key='-RESET-')
 
 # Alle slotknoppen in een lijst
 slotknoppen = ['-brSLOT-', '-bgSLOT-', '-bgrSLOT-', '-bbSLOT-']
@@ -84,13 +84,12 @@ layout = [
     layout_blauw,
     layout_missers,
     [t_rood, t_geel, t_groen, t_blauw, t_totaal],
-    [b_exit, b_reset]
-]
+    [knop_exit, knop_reset]]
 
 window = psg.Window('DEDEM_02_QWIXX', layout)
 window.finalize()
 
-aantal = {
+kruisjes = {
     'rood': 0,
     'geel': 0,
     'groen': 0,
@@ -110,25 +109,25 @@ def bereken_score(aantal_kruisjes):
 
 def update_scores():
     # Rood tellen
-    totaal_rood = aantal['rood']
+    totaal_rood = kruisjes['rood']
     if slot_aan['rood']:
         totaal_rood += 1
     score_rood = bereken_score(totaal_rood)
 
     # Geel tellen
-    totaal_geel = aantal['geel']
+    totaal_geel = kruisjes['geel']
     if slot_aan['geel']:
         totaal_geel += 1
     score_geel = bereken_score(totaal_geel)
 
     # Groen tellen
-    totaal_groen = aantal['groen']
+    totaal_groen = kruisjes['groen']
     if slot_aan['groen']:
         totaal_groen += 1
     score_groen = bereken_score(totaal_groen)
 
     # Blauw tellen
-    totaal_blauw = aantal['blauw']
+    totaal_blauw = kruisjes['blauw']
     if slot_aan['blauw']:
         totaal_blauw += 1
     score_blauw = bereken_score(totaal_blauw)
@@ -142,6 +141,16 @@ def update_scores():
     window['-TGROEN-'].update(f'Groen: {score_groen}')
     window['-TBLAUW-'].update(f'Blauw: {score_blauw}')
     window['-TTOTAAL-'].update(f'Totaal: {totaal}')
+
+def controle_einde_spel():
+    gesloten_kleuren = 0
+
+    for kleur in slot_aan:
+        if slot_aan[kleur]:
+            gesloten_kleuren += 1
+
+    if gesloten_kleuren == 2:
+        psg.popup('Einde spel: 2 kleuren gesloten.')
 
 def mag_aankruisen(event):
     #controle voor de rode rij
@@ -187,15 +196,15 @@ def update_beschikbare_knoppen():
     verboden_knoppen.clear()
 
     # Rood
-    meest_rechtse_kruisje = -1
+    laatste_kruisje = -1
     for knop in rode_knoppen:
         if window[knop].get_text() == 'X':
-            meest_rechtse_kruisje = rode_knoppen.index(knop)
+            laatste_kruisje = rode_knoppen.index(knop)
     for knop in rode_knoppen:
         positie_van_knop = rode_knoppen.index(knop)
         if window[knop].get_text() == 'X':
             window[knop].update(button_color=(WIT, ROOD))
-        elif positie_van_knop < meest_rechtse_kruisje:
+        elif positie_van_knop < laatste_kruisje:
             verboden_knoppen.append(knop)
             window[knop].update(button_color=(WIT, ZWART))
         else:
@@ -203,30 +212,30 @@ def update_beschikbare_knoppen():
 
 
     # Geel
-    meest_rechtse_kruisje = -1
+    laatste_kruisje = -1
     for knop in gele_knoppen:
         if window[knop].get_text() == 'X':
-            meest_rechtse_kruisje = gele_knoppen.index(knop)
+            laatste_kruisje = gele_knoppen.index(knop)
     for knop in gele_knoppen:
         positie_van_knop = gele_knoppen.index(knop)
         if window[knop].get_text() == 'X':
             window[knop].update(button_color=(WIT, GEEL))
-        elif positie_van_knop < meest_rechtse_kruisje:
+        elif positie_van_knop < laatste_kruisje:
             verboden_knoppen.append(knop)
             window[knop].update(button_color=(WIT, ZWART))
         else:
             window[knop].update(button_color=(WIT, GEEL))
 
     # Groen
-    meest_rechtse_kruisje = -1
+    laatste_kruisje = -1
     for knop in groene_knoppen:
         if window[knop].get_text() == 'X':
-            meest_rechtse_kruisje = groene_knoppen.index(knop)
+            laatste_kruisje = groene_knoppen.index(knop)
     for knop in groene_knoppen:
         positie_van_knop = groene_knoppen.index(knop)
         if window[knop].get_text() == 'X':
             window[knop].update(button_color=(WIT, GROEN))
-        elif positie_van_knop < meest_rechtse_kruisje:
+        elif positie_van_knop < laatste_kruisje:
             verboden_knoppen.append(knop)
             window[knop].update(button_color=(WIT, ZWART))
         else:
@@ -234,15 +243,15 @@ def update_beschikbare_knoppen():
 
 
     # Blauw
-    meest_rechtse_kruisje = -1
+    laatste_kruisje = -1
     for knop in blauwe_knoppen:
         if window[knop].get_text() == 'X':
-            meest_rechtse_kruisje = blauwe_knoppen.index(knop)
+            laatste_kruisje = blauwe_knoppen.index(knop)
     for knop in blauwe_knoppen:
         positie_van_knop = blauwe_knoppen.index(knop)
         if window[knop].get_text() == 'X':
             window[knop].update(button_color=(WIT, BLAUW))
-        elif positie_van_knop < meest_rechtse_kruisje:
+        elif positie_van_knop < laatste_kruisje:
             verboden_knoppen.append(knop)
             window[knop].update(button_color=(WIT, ZWART))
         else:
@@ -255,7 +264,7 @@ def update_knop(event):
         return
     
     if event == '-brSLOT-':
-        if aantal['rood'] >= 5 and window['-br12-'].get_text() == 'X':
+        if kruisjes['rood'] >= 5 and window['-br12-'].get_text() == 'X':
             slot_aan['rood'] = not slot_aan['rood']
             if slot_aan['rood']:
                 window[event].update(image_filename='DEDEM_Rood_slot_kruisje.png')
@@ -263,36 +272,43 @@ def update_knop(event):
                 window[event].update(image_filename='DEDEM_Rood_slot_leeg.png')
             update_scores()
             update_beschikbare_knoppen()
+            controle_einde_spel()
 
     elif event == '-bgSLOT-':
-        if aantal['geel'] >= 5 and window['-bg12-'].get_text() == 'X':
+        if kruisjes['geel'] >= 5 and window['-bg12-'].get_text() == 'X':
             slot_aan['geel'] = not slot_aan['geel']
             if slot_aan['geel']:
                 window[event].update(image_filename='DEDEM_Geel_slot_kruisje.png')
             else:
                 window[event].update(image_filename='DEDEM_Geel_slot_leeg.png')
+
             update_scores()
             update_beschikbare_knoppen()
+            controle_einde_spel()
 
     elif event == '-bgrSLOT-':
-        if aantal['groen'] >= 5 and window['-bgr2-'].get_text() == 'X':
+        if kruisjes['groen'] >= 5 and window['-bgr2-'].get_text() == 'X':
             slot_aan['groen'] = not slot_aan['groen']
             if slot_aan['groen']:
                 window[event].update(image_filename='DEDEM_Groen_slot_kruisje.png')
             else:
                 window[event].update(image_filename='DEDEM_Groen_slot_leeg.png')
+
             update_scores()
             update_beschikbare_knoppen()
 
+
     elif event == '-bbSLOT-':
-        if aantal['blauw'] >= 5 and window['-bb2-'].get_text() == 'X':
+        if kruisjes['blauw'] >= 5 and window['-bb2-'].get_text() == 'X':
             slot_aan['blauw'] = not slot_aan['blauw']
             if slot_aan['blauw']:
                 window[event].update(image_filename='DEDEM_Blauw_slot_kruisje.png')
             else:
                 window[event].update(image_filename='DEDEM_Blauw_slot_leeg.png')
+                
             update_scores()
             update_beschikbare_knoppen()
+            controle_einde_spel()
 
     else:
         # kruisje verwijderen
@@ -300,28 +316,29 @@ def update_knop(event):
             nummer = haal_nummer_uit_key(event)
             window[event].update(nummer)
             if event in rode_knoppen:
-                aantal['rood'] -= 1
+                kruisjes['rood'] -= 1
             elif event in gele_knoppen:
-                aantal['geel'] -= 1
+                kruisjes['geel'] -= 1
             elif event in groene_knoppen:
-                aantal['groen'] -= 1
+                kruisjes['groen'] -= 1
             elif event in blauwe_knoppen:
-                aantal['blauw'] -= 1
+                kruisjes['blauw'] -= 1
 
         # kruisje zetten
         else:                
             window[event].update('X')
             if event in rode_knoppen:
-                aantal['rood'] += 1
+                kruisjes['rood'] += 1
             elif event in gele_knoppen:
-                aantal['geel'] += 1
+                kruisjes['geel'] += 1
             elif event in groene_knoppen:
-                aantal['groen'] += 1
+                kruisjes['groen'] += 1
             elif event in blauwe_knoppen:
-                aantal['blauw'] += 1
+                kruisjes['blauw'] += 1
                 
         update_scores()
         update_beschikbare_knoppen()
+        controle_einde_spel()
 
 # Startscores instellen
 update_scores()
@@ -340,7 +357,7 @@ while doorgaan:
     elif event == '-RESET-':
         keuze = psg.popup_yes_no('Ben je zeker dat je alles wilt resetten?')
         if keuze == 'Yes':
-            aantal = {'rood': 0, 'geel': 0, 'groen': 0, 'blauw': 0}
+            kruisjes = {'rood': 0, 'geel': 0, 'groen': 0, 'blauw': 0}
             slot_aan = {'rood': False, 'geel': False, 'groen': False, 'blauw': False}
             aantal_missers = 0
         
